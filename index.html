@@ -55,23 +55,87 @@
       color: var(--link);
       text-underline-offset: 0.15em;
     }
+    .languages:not([hidden]) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .languages a[aria-current="true"] {
+      color: var(--text);
+      font-weight: 700;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
   <main>
-    <header>
-      <p>Iglesia Armonía Radio</p>
-      <h1>Política de privacidad</h1>
-      <p>Versión 1.2 · <time datetime="2026-11-19">19 de noviembre de 2026</time></p>
-    </header>
+    <nav class="languages" aria-label="Idioma" hidden>
+      <a href="#es" lang="es">Español</a>
+      <a href="#en" lang="en">English</a>
+    </nav>
 
-    <p><strong>La app no tiene anuncios, rastreo ni herramientas de análisis de uso.</strong> Puede escuchar la radio sin crear una cuenta ni ingresar datos personales.</p>
+    <article lang="es" data-policy-language="es">
+      <header>
+        <p>Iglesia Armonía Radio</p>
+        <h1>Política de privacidad</h1>
+        <p>Versión 1.2 · <time datetime="2026-11-19">19 de noviembre de 2026</time></p>
+      </header>
 
-    <p><a href="https://www.mohosting.cl/">MoHosting</a> aloja la transmisión de radio. GitHub solo aloja esta política y el <a href="https://github.com/iglesiaarmonia/radio-stream/blob/main/stream.txt">archivo con la dirección de la radio</a>.</p>
+      <p><strong>La app no tiene anuncios, rastreo ni herramientas de análisis de uso.</strong> Puede escuchar la radio sin crear una cuenta ni ingresar datos personales.</p>
 
-    <p>Al conectarse, estos servicios reciben la dirección IP. <a href="https://docs.github.com/es/site-policy/privacy-policies/github-general-privacy-statement">GitHub registra la IP</a> de las visitas a esta página por seguridad.</p>
+      <p><a href="https://www.mohosting.cl/">MoHosting</a> aloja la transmisión de radio. GitHub solo aloja esta política y el <a href="https://github.com/iglesiaarmonia/radio-stream/blob/main/stream.txt">archivo con la dirección de la radio</a>.</p>
 
-    <p>Iglesia Armonía de Vista y la app no conservan registros individuales de escucha. Para consultas de privacidad o solicitudes de eliminación de datos, escriba a <a href="mailto:iglesiaarmoniadevista@gmail.com">iglesiaarmoniadevista@gmail.com</a>.</p>
+      <p>Al conectarse, estos servicios reciben la dirección IP. <a href="https://docs.github.com/es/site-policy/privacy-policies/github-general-privacy-statement">GitHub registra la IP</a> de las visitas a esta página por seguridad.</p>
+
+      <p>Iglesia Armonía de Vista y la app no conservan registros individuales de escucha. Para consultas de privacidad o solicitudes de eliminación de datos, escriba a <a href="mailto:iglesiaarmoniadevista@gmail.com">iglesiaarmoniadevista@gmail.com</a>.</p>
+    </article>
+
+    <article lang="en" data-policy-language="en" hidden>
+      <header>
+        <p>Iglesia Armonía Radio</p>
+        <h1>Privacy Policy</h1>
+        <p>Version 1.2 · <time datetime="2026-11-19">November 19, 2026</time></p>
+      </header>
+
+      <p><strong>The app has no ads, tracking, or analytics.</strong> You can listen without creating an account or entering personal information.</p>
+
+      <p><a href="https://www.mohosting.cl/">MoHosting</a> hosts the radio stream. GitHub only hosts this policy and the <a href="https://github.com/iglesiaarmonia/radio-stream/blob/main/stream.txt">file containing the stream URL</a>.</p>
+
+      <p>These services receive your IP address when you connect. <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub logs the IP addresses</a> of visitors to this page for security.</p>
+
+      <p>Iglesia Armonía de Vista and the app do not keep individual listening records. For privacy questions or data deletion requests, email <a href="mailto:iglesiaarmoniadevista@gmail.com">iglesiaarmoniadevista@gmail.com</a>.</p>
+    </article>
   </main>
+  <script>
+    const languageNav = document.querySelector(".languages");
+    const languageLinks = languageNav.querySelectorAll("a");
+    const policies = document.querySelectorAll("[data-policy-language]");
+
+    function showSelectedLanguage() {
+      const language = window.location.hash === "#en" ? "en" : "es";
+      document.documentElement.lang = language;
+      languageNav.setAttribute("aria-label", language === "en" ? "Language" : "Idioma");
+
+      for (const policy of policies) {
+        policy.hidden = policy.dataset.policyLanguage !== language;
+        if (!policy.hidden) {
+          document.title = policy.querySelector("h1").textContent + " | Iglesia Armonía Radio";
+        }
+      }
+
+      for (const link of languageLinks) {
+        if (link.lang === language) {
+          link.setAttribute("aria-current", "true");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      }
+    }
+
+    window.addEventListener("hashchange", showSelectedLanguage);
+    showSelectedLanguage();
+    languageNav.hidden = false;
+  </script>
 </body>
 </html>
